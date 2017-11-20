@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, Switch, Redirect } from 'react-router-dom';
 import { addListener, removeListener, isAuthorized } from './AuthorizeApi';
+import Home from './Home';
+import Public from './Public';
+import Private from './Private';
+import Auth from './Auth';
 
 import './App.css';
 
@@ -22,6 +26,7 @@ class App extends Component {
     };
 
     render() {
+        const { isAuthorized } = this.state;
         return (
             <div>
                 <nav>
@@ -40,9 +45,33 @@ class App extends Component {
                         </li>
                     </ul>
                 </nav>
+                <hr />
+                <div>
+                    <Switch>
+                        <Route
+                            path="/auth"
+                            render={props => (
+                                <Auth isAuthorized={isAuthorized} {...props} />
+                            )}
+                        />
+                        {isAuthorized === true ? (
+                            <Route path="/private" component={Private} />
+                        ) : null}
+                        <Route path="/public" component={Public} />
+                        <Route path="/" exact component={Home} />
+                        {isAuthorized === false ? (
+                            <Redirect from="/private" to="/auth" />
+                        ) : (
+                            false
+                        )}
+                        <Redirect to="/" />
+                    </Switch>
+                </div>
             </div>
         );
     }
 }
 
 export default App;
+
+// <Route path="/auth" component={Auth} />
