@@ -56,14 +56,12 @@ class App extends Component {
                         />
                         {isAuthorized === true ? (
                             <Route path="/private" component={Private} />
-                        ) : null}
+                        ) : (
+                            <Redirect from="/private" to="/auth" />
+                        )}
                         <Route path="/public" component={Public} />
                         <Route path="/" exact component={Home} />
-                        {isAuthorized === false ? (
-                            <Redirect from="/private" to="/auth" />
-                        ) : (
-                            false
-                        )}
+
                         <Redirect to="/" />
                     </Switch>
                 </div>
@@ -74,4 +72,10 @@ class App extends Component {
 
 export default App;
 
-// <Route path="/auth" component={Auth} />
+// {
+//     isAuthorized ? (
+//         <Route path="/private" component={Private} />
+//     ) : (
+//         <Redirect from="/private" to="/auth" />
+//     );
+// }
